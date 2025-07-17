@@ -623,10 +623,17 @@
             document.querySelectorAll('.copy-btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.stopPropagation();
-                    const link = this.parentElement.textContent.trim();
-                    navigator.clipboard.writeText(link).then(() => {
-                        showMessage('链接已复制到剪贴板', 'success');
-                    });
+                    const linkElement = this.parentElement.querySelector('span.access-link');
+                    const link = linkElement ? linkElement.textContent.trim() : '';
+                    if (link) {
+                        navigator.clipboard.writeText(link).then(() => {
+                            showMessage('链接已复制到剪贴板', 'success');
+                        }).catch(() => {
+                            showMessage('复制失败，请手动复制！', 'error');
+                        });
+                    } else {
+                        showMessage('复制失败，请手动复制！', 'error');
+                    }
                 });
             });
 
