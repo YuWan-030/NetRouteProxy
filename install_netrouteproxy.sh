@@ -54,7 +54,7 @@ fi
 
 # 下载软件压缩包
 echo -e "${YELLOW}正在下载NetRouteProxy...${NC}"
-curl -L -o NetRouteProxy.zip https://github.com/Azizi030/NetRouteProxy/archive/refs/heads/main.zip
+curl -L -o NetRouteProxy-main.zip https://github.com/Azizi030/NetRouteProxy/archive/refs/heads/main.zip
 if [ $? -ne 0 ]; then
     echo -e "${RED}错误：下载失败，请检查网络连接或URL是否正确。${NC}"
     exit 1
@@ -63,7 +63,7 @@ echo -e "${GREEN}下载完成。${NC}"
 
 # 解压压缩包
 echo -e "${YELLOW}正在解压...${NC}"
-unzip -q NetRouteProxy.zip
+unzip -q NetRouteProxy-main.zip
 if [ $? -ne 0 ]; then
     echo -e "${RED}错误：解压失败，请检查压缩包是否损坏。${NC}"
     exit 1
@@ -71,12 +71,12 @@ fi
 echo -e "${GREEN}解压完成。${NC}"
 
 # 清理压缩包
-rm NetRouteProxy.zip
+rm NetRouteProxy-main.zip
 
-# 获取解压后的目录名
-dir_name=$(unzip -Z1 NetRouteProxy.zip | head -1 | cut -d/ -f1)
-if [ -z "$dir_name" ]; then
-    echo -e "${RED}错误：无法获取解压后的目录名。${NC}"
+# 直接指定解压后的目录名
+dir_name="NetRouteProxy-main"
+if [ ! -d "$dir_name" ]; then
+    echo -e "${RED}错误：未找到解压后的目录。${NC}"
     exit 1
 fi
 
@@ -114,4 +114,3 @@ echo -e "${GREEN}===== NetRouteProxy 安装部署完成 ====${NC}"
 echo -e "${GREEN}程序目录: $(pwd)${NC}"
 echo -e "${GREEN}===== 正在前台运行程序，按 Ctrl+C 停止 ====${NC}"
 python3 "$main_file"
-    
