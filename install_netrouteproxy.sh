@@ -52,6 +52,25 @@ else
     echo -e "${GREEN}已安装Python3。${NC}"
 fi
 
+# 检测并安装unzip
+echo -e "${YELLOW}正在检测unzip...${NC}"
+if ! command -v unzip &> /dev/null; then
+    echo -e "${YELLOW}未找到unzip，正在安装...${NC}"
+    # 检测系统包管理器
+    if command -v apt-get &> /dev/null; then
+        apt-get update
+        apt-get install -y unzip
+    elif command -v yum &> /dev/null; then
+        yum install -y unzip
+    else
+        echo -e "${RED}错误：无法识别系统包管理器，请手动安装unzip。${NC}"
+        exit 1
+    fi
+    echo -e "${GREEN}unzip安装完成。${NC}"
+else
+    echo -e "${GREEN}已安装unzip。${NC}"
+fi
+
 # 下载软件压缩包
 echo -e "${YELLOW}正在下载NetRouteProxy...${NC}"
 curl -L -o NetRouteProxy-main.zip https://github.com/Azizi030/NetRouteProxy/archive/refs/heads/main.zip
