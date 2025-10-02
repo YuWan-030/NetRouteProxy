@@ -23,11 +23,11 @@ systemctl status nr     # 查看服务状态
 
 ## Web 管理面板
 
-安装成功后，Web 管理面板会在所有网卡的 8088 端口监听。可通过如下地址访问（公网/内网 IP 均可）：
+安装成功后，Web 管理面板会在所有网卡的 8080 端口监听。可通过如下地址访问（公网/内网 IP 均可）：
 
 ```bash
 # 查看所有可访问地址
-for ip in $(hostname -I); do echo "http://$ip:8088"; done
+for ip in $(hostname -I); do echo "http://$ip:8080"; done
 ```
 
 ## 主要功能
