@@ -369,6 +369,50 @@
             background: var(--error);
             color: white;
         }
+        /* 协议类型选择框专属样式 */
+        select#protocol {
+            width: 100%;
+            padding: 15px 20px 15px 45px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--input-bg);
+            transition: all 0.3s;
+            box-shadow: var(--shadow-sm);
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+        select#protocol:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.2);
+            outline: none;
+        }
+        /* 协议类型表格列样式 */
+        .protocol-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            letter-spacing: 1px;
+            margin-right: 4px;
+        }
+        .protocol-tag.UDP {
+            background: linear-gradient(90deg, #43a047 0%, #5ad1e6 100%);
+        }
+        .protocol-tag.TCP {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+        /* 兼容移动端选择框 */
+        @media (max-width: 480px) {
+            select#protocol {
+                padding: 14px 16px 14px 42px;
+                font-size: 0.95rem;
+            }
+        }
 
         /* 空状态 */
         .empty-state {
