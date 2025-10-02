@@ -7,7 +7,7 @@
 使用如下命令一键安装并注册为系统服务（无需 screen、支持 systemctl 命令管理，服务名为 `nr`）：
 
 ```bash
-curl -s https://raw.githubusercontent.com/Azizi030/NetRouteProxy/main/install_netrouteproxy.sh | sudo bash
+curl -s https://github.com/YuWan-030/NetRouteProxy/blob/main/install_netrouteproxy.sh | sudo bash
 ```
 
 ## 系统服务管理命令
