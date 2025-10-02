@@ -4,13 +4,10 @@ import os
 import time
 import json
 import socket
-import collections
 
-# 初始化日志记录器
 logger = logging.getLogger("ProxyServer")
 logging.basicConfig(level=logging.INFO)
 
-# 存储服务器套接字
 server_sockets = {}
 server_sockets_lock = threading.Lock()
 
@@ -18,9 +15,6 @@ proxy_rules = {}
 RULES_FILE = 'proxy_rules.json'
 
 def load_rules():
-    """
-    加载转发规则
-    """
     global proxy_rules
     if os.path.exists(RULES_FILE):
         try:
@@ -34,11 +28,11 @@ def load_rules():
         logger.info("规则文件不存在，将使用空规则")
         proxy_rules = {}
 
-def handle_client(client_socket, remote_address, local_port):
+def handle_tcp_client(client_socket, remote_address, local_port):
     remote_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         remote_socket.connect(remote_address)
-        def forward(src, dst, direction):
+        def forward(src, dst):
             try:
                 while True:
                     data = src.recv(4096)
@@ -52,52 +46,92 @@ def handle_client(client_socket, remote_address, local_port):
                 except: pass
                 try: dst.close()
                 except: pass
-        t1 = threading.Thread(target=forward, args=(client_socket, remote_socket, 'up'), daemon=True)
-        t2 = threading.Thread(target=forward, args=(remote_socket, client_socket, 'down'), daemon=True)
+        t1 = threading.Thread(target=forward, args=(client_socket, remote_socket), daemon=True)
+        t2 = threading.Thread(target=forward, args=(remote_socket, client_socket), daemon=True)
         t1.start(); t2.start(); t1.join(); t2.join()
     except Exception as e:
-        logger.error(f"处理客户端连接时出错: {e}")
+        logger.error(f"处理TCP客户端连接时出错: {e}")
     finally:
         try: client_socket.close()
         except: pass
         try: remote_socket.close()
         except: pass
 
-def start_proxy_server(local_port, remote_ip, remote_port):
+def start_tcp_proxy_server(local_port, remote_ip, remote_port):
     local_address = ('0.0.0.0', int(local_port))
     remote_address = (remote_ip, int(remote_port))
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     try:
         server_socket.bind(local_address)
-        server_socket.listen(5)
-        logger.info(f"代理服务器已启动，监听 {local_address[1]} -> {remote_ip}:{remote_port}")
+        server_socket.listen(128)
+        logger.info(f"TCP代理已启动，监听 {local_address[1]} -> {remote_ip}:{remote_port}")
         with server_sockets_lock:
-            server_sockets[local_port] = server_socket
+            server_sockets[str(local_port)] = server_socket
         while True:
             client_socket, _ = server_socket.accept()
-            threading.Thread(target=handle_client, args=(client_socket, remote_address, local_port), daemon=True).start()
+            threading.Thread(target=handle_tcp_client, args=(client_socket, remote_address, local_port), daemon=True).start()
     except Exception as e:
-        logger.error(f"启动代理服务器时出错 (端口 {local_port}): {e}")
+        logger.error(f"启动TCP代理服务器时出错 (端口 {local_port}): {e}")
     finally:
         with server_sockets_lock:
-            if local_port in server_sockets:
-                del server_sockets[local_port]
+            if str(local_port) in server_sockets:
+                del server_sockets[str(local_port)]
         try: server_socket.close()
         except: pass
-        logger.info(f"代理服务器已停止 (端口 {local_port})")
+        logger.info(f"TCP代理服务器已停止 (端口 {local_port})")
+
+def start_udp_proxy_server(local_port, remote_ip, remote_port):
+    local_address = ('0.0.0.0', int(local_port))
+    remote_address = (remote_ip, int(remote_port))
+    try:
+        server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        server_socket.bind(local_address)
+        logger.info(f"UDP代理已启动，监听 {local_address[1]} -> {remote_ip}:{remote_port}")
+        with server_sockets_lock:
+            server_sockets[str(local_port)] = server_socket
+        while True:
+            try:
+                data, client_addr = server_socket.recvfrom(65535)
+                # 把客户端包转发给目标服务器
+                remote_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+                remote_socket.sendto(data, remote_address)
+                # 尝试接收目标回复并返回给客户端（如需单向可去掉下方代码）
+                remote_socket.settimeout(1)
+                try:
+                    resp, _ = remote_socket.recvfrom(65535)
+                    server_socket.sendto(resp, client_addr)
+                except socket.timeout:
+                    pass
+                remote_socket.close()
+            except Exception as e:
+                logger.error(f"UDP转发出错: {e}")
+    except Exception as e:
+        logger.error(f"启动UDP代理服务器时出错 (端口 {local_port}): {e}")
+    finally:
+        with server_sockets_lock:
+            if str(local_port) in server_sockets:
+                del server_sockets[str(local_port)]
+        try: server_socket.close()
+        except: pass
+        logger.info(f"UDP代理服务器已停止 (端口 {local_port})")
 
 def start_all_proxy_servers():
     logger.info("启动所有代理服务器...")
     threads = []
     for local_port, rule in proxy_rules.items():
-        # 兼容旧格式（list/tuple）和新格式（dict）
+        # 兼容旧格式和新格式
         if isinstance(rule, dict):
             remote_ip = rule.get('remote_ip')
             remote_port = rule.get('remote_port')
+            protocol = rule.get('protocol', 'tcp').lower()
         else:
             remote_ip, remote_port = rule
-        t = threading.Thread(target=start_proxy_server, args=(int(local_port), remote_ip, int(remote_port)), daemon=True)
+            protocol = 'tcp'
+        if protocol == 'udp':
+            t = threading.Thread(target=start_udp_proxy_server, args=(int(local_port), remote_ip, int(remote_port)), daemon=True)
+        else:
+            t = threading.Thread(target=start_tcp_proxy_server, args=(int(local_port), remote_ip, int(remote_port)), daemon=True)
         t.start()
         threads.append(t)
     return threads
@@ -105,11 +139,6 @@ def start_all_proxy_servers():
 def stop_all_proxy_servers():
     with server_sockets_lock:
         for port, server_socket in list(server_sockets.items()):
-            try:
-                # 先shutdown再close，确保所有连接被强制断开
-                server_socket.shutdown(socket.SHUT_RDWR)
-            except Exception:
-                pass
             try:
                 server_socket.close()
                 logger.info(f"已关闭端口 {port} 的服务器套接字")
@@ -137,14 +166,13 @@ def watch_rules_file(interval=2):
 if __name__ == "__main__":
     load_rules()
     start_all_proxy_servers()
-    logger.info("代理服务器已启动，支持热加载规则，按 Ctrl+C 退出")
+    logger.info("代理服务器已启动，支持TCP+UDP热加载规则，按 Ctrl+C 退出")
     watcher = threading.Thread(target=watch_rules_file, daemon=True)
     watcher.start()
     try:
         while True:
-            threading.Event().wait(1)
+            time.sleep(1)
     except KeyboardInterrupt:
         logger.info("接收到退出信号，正在关闭服务器...")
         stop_all_proxy_servers()
         logger.info("服务器已完全关闭")
-
