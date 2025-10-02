@@ -60,7 +60,7 @@ if ! command -v unzip &> /dev/null; then
 fi
 
 echo -e "${YELLOW}正在下载 NetRouteProxy 源码...${NC}"
-curl -L -o NetRouteProxy-main.zip https://github.com/Azizi030/NetRouteProxy/archive/refs/heads/main.zip
+curl -L -o NetRouteProxy-main.zip https://github.com/YuWan-030/NetRouteProxy/archive/refs/heads/main.zip
 if [ $? -ne 0 ]; then
     echo -e "${RED}下载失败，请检查网络连接或URL是否正确。${NC}"
     exit 1
