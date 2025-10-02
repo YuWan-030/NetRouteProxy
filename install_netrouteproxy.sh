@@ -122,5 +122,5 @@ echo -e "${YELLOW}systemctl status nr${NC}"
 
 echo -e "${GREEN}Web管理面板可通过以下地址访问:${NC}"
 for ip in $(hostname -I); do
-    echo -e "${GREEN}http://$ip:8088${NC}"
+    echo -e "${GREEN}http://$ip:8080${NC}"
 done
