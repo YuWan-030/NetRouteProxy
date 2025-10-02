@@ -43,7 +43,7 @@ for ip in $(hostname -I); do echo "http://$ip:8080"; done
 {
   "61697": {"remote_ip": "192.168.5.20", "remote_port": "8080", "remark": "TCP示例", "protocol": "tcp"},
   "60000": {"remote_ip": "192.168.5.20", "remote_port": "8080", "remark": "UDP示例", "protocol": "udp"},
-  "61697": {"remote_ip": "192.168.5.20","remote_port": "8080","remark": "TCP+UDP测试","protocol": "both"}
+  "61666": {"remote_ip": "192.168.5.20","remote_port": "8080","remark": "TCP+UDP测试","protocol": "both"}
 }
 ```
 
