@@ -14,7 +14,6 @@ proxy_rules = {}
 
 ADMIN_PAGE_FILE = 'admin_page.html'
 
-
 def load_rules():
     global proxy_rules
     if os.path.exists(RULES_FILE):
@@ -29,7 +28,6 @@ def load_rules():
         logger.info("规则文件不存在，将使用空规则")
         proxy_rules = {}
 
-
 def save_rules():
     try:
         with open(RULES_FILE, 'w') as f:
@@ -37,7 +35,6 @@ def save_rules():
         logger.info(f"已保存 {len(proxy_rules)} 条转发规则")
     except Exception as e:
         logger.error(f"保存规则文件失败: {e}")
-
 
 def get_server_ip():
     try:
@@ -49,14 +46,12 @@ def get_server_ip():
     except:
         return "127.0.0.1"
 
-
 def get_free_port():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind(('', 0))
     port = s.getsockname()[1]
     s.close()
     return port
-
 
 def load_admin_page():
     try:
@@ -65,7 +60,6 @@ def load_admin_page():
     except Exception as e:
         logger.error(f"加载管理页面失败: {e}")
         return f"<h1>Error loading admin page</h1><p>{str(e)}</p>"
-
 
 class AdminRequestHandler(BaseHTTPRequestHandler):
     def _send_response(self, content, status=200, content_type='text/html'):
@@ -137,13 +131,11 @@ class AdminRequestHandler(BaseHTTPRequestHandler):
         else:
             self._send_response('404 Not Found', 404)
 
-
 def start_admin_server(port=8080):
     server_address = ('0.0.0.0', port)
     httpd = ThreadingHTTPServer(server_address, AdminRequestHandler)
     logger.info(f"管理服务器已启动，访问 http://{get_server_ip()}:{port} 进行管理")
     httpd.serve_forever()
-
 
 if __name__ == "__main__":
     load_rules()

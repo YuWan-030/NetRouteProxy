@@ -6,7 +6,6 @@
     <title>代理服务器管理</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* 高级配色方案 */
         :root {
             --primary: #6c63ff;
             --primary-dark: #5651d9;
@@ -27,14 +26,11 @@
             --shadow-md: 0 8px 24px rgba(0,0,0,0.1);
             --shadow-lg: 0 12px 32px rgba(0,0,0,0.15);
         }
-
-        /* 基础样式重置 */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
             background: linear-gradient(135deg, var(--light) 0%, var(--light-gray) 100%);
@@ -44,20 +40,16 @@
             line-height: 1.6;
             transition: background var(--animation-duration);
         }
-
         .container {
             max-width: 900px;
             margin: 0 auto;
         }
-
-        /* 头部样式 */
         header {
             margin-bottom: 30px;
             display: flex;
             align-items: center;
             gap: 16px;
         }
-
         .logo {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             width: 60px;
@@ -68,12 +60,10 @@
             justify-content: center;
             box-shadow: var(--shadow-md);
         }
-
         .logo i {
             color: white;
             font-size: 28px;
         }
-
         h1 {
             font-size: 2.4rem;
             font-weight: 800;
@@ -83,7 +73,6 @@
             color: transparent;
             margin-bottom: 6px;
         }
-
         .subtitle {
             color: var(--dark-light);
             font-size: 1rem;
@@ -92,12 +81,9 @@
             align-items: center;
             gap: 8px;
         }
-
         .subtitle i {
             color: var(--primary);
         }
-
-        /* 卡片样式 */
         .card {
             background: var(--card-bg);
             border-radius: var(--border-radius);
@@ -106,12 +92,10 @@
             box-shadow: var(--shadow-sm);
             transition: transform 0.3s, box-shadow 0.3s;
         }
-
         .card:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-lg);
         }
-
         h2 {
             font-size: 1.5rem;
             margin-bottom: 22px;
@@ -122,7 +106,6 @@
             align-items: center;
             gap: 12px;
         }
-
         h2::after {
             content: '';
             position: absolute;
@@ -133,37 +116,30 @@
             background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
             border-radius: 2px;
         }
-
         h2 i {
             color: var(--primary);
         }
-
-        /* 表单样式 */
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 24px;
         }
-
         .form-group {
             margin-bottom: 0;
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 0.5s forwards ease-in-out;
         }
-
         @keyframes fadeInUp {
             to {
                 opacity: 1;
                 transform: none;
             }
         }
-
         .form-group:nth-child(1) { animation-delay: 0.1s; }
         .form-group:nth-child(2) { animation-delay: 0.2s; }
         .form-group:nth-child(3) { animation-delay: 0.3s; }
         .form-group:nth-child(4) { animation-delay: 0.4s; }
-
         label {
             display: block;
             margin-bottom: 10px;
@@ -173,16 +149,13 @@
             align-items: center;
             gap: 8px;
         }
-
         label i {
             color: var(--primary);
             font-size: 0.9em;
         }
-
         .input-wrapper {
             position: relative;
         }
-
         input {
             width: 100%;
             padding: 15px 20px 15px 45px;
@@ -193,13 +166,11 @@
             transition: all 0.3s;
             box-shadow: var(--shadow-sm);
         }
-
         input:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.2);
             outline: none;
         }
-
         .input-icon {
             position: absolute;
             left: 18px;
@@ -208,14 +179,12 @@
             color: var(--primary);
             font-size: 1.1rem;
         }
-
         .form-actions {
             grid-column: 1 / -1;
             display: flex;
             justify-content: flex-end;
             margin-top: 10px;
         }
-
         button {
             background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
@@ -231,18 +200,14 @@
             transition: all 0.3s;
             box-shadow: var(--shadow-md);
         }
-
         button:hover {
             background: linear-gradient(90deg, var(--primary-dark) 0%, var(--secondary) 100%);
             box-shadow: var(--shadow-lg);
             transform: translateY(-2px);
         }
-
         button:active {
             transform: translateY(0);
         }
-
-        /* 消息提示 */
         .message {
             padding: 15px 20px;
             border-radius: 12px;
@@ -256,31 +221,25 @@
             transform: translateY(10px);
             transition: all 0.4s;
         }
-
         .message.show {
             opacity: 1;
             transform: none;
         }
-
         .error {
             background: rgba(229, 57, 53, 0.1);
             color: var(--error);
             border: 1px solid rgba(229, 57, 53, 0.2);
         }
-
         .success {
             background: rgba(67, 160, 71, 0.1);
             color: var(--success);
             border: 1px solid rgba(67, 160, 71, 0.2);
         }
-
-        /* 表格样式 */
         .table-container {
             overflow-x: auto;
             border-radius: var(--border-radius);
             box-shadow: var(--shadow-sm);
         }
-
         .rule-table {
             width: 100%;
             border-collapse: separate;
@@ -290,7 +249,6 @@
             overflow: hidden;
             min-width: 700px;
         }
-
         .rule-table th {
             background: var(--table-header);
             color: var(--dark-light);
@@ -299,25 +257,20 @@
             text-align: left;
             font-size: 1rem;
         }
-
         .rule-table td {
             padding: 18px 16px;
             border-bottom: 1px solid #edf2f7;
             font-size: 0.95rem;
         }
-
         .rule-table tr:last-child td {
             border-bottom: none;
         }
-
         .rule-table tr {
             transition: background 0.2s;
         }
-
         .rule-table tr:hover {
             background: var(--table-hover);
         }
-
         .access-link {
             display: inline-flex;
             align-items: center;
@@ -330,11 +283,9 @@
             font-size: 0.95rem;
             transition: all 0.2s;
         }
-
         .access-link:hover {
             background: rgba(92, 99, 255, 0.2);
         }
-
         .copy-btn {
             background: none;
             border: none;
@@ -345,11 +296,9 @@
             border-radius: 4px;
             transition: all 0.2s;
         }
-
         .copy-btn:hover {
             background: rgba(92, 99, 255, 0.1);
         }
-
         .remove-btn {
             background: rgba(229, 57, 53, 0.1);
             color: var(--error);
@@ -364,12 +313,10 @@
             gap: 8px;
             transition: all 0.2s;
         }
-
         .remove-btn:hover {
             background: var(--error);
             color: white;
         }
-        /* 协议类型选择框专属样式 */
         select#protocol {
             width: 100%;
             padding: 15px 20px 15px 45px;
@@ -388,7 +335,6 @@
             box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.2);
             outline: none;
         }
-        /* 协议类型表格列样式 */
         .protocol-tag {
             display: inline-block;
             padding: 4px 12px;
@@ -406,99 +352,81 @@
         .protocol-tag.TCP {
             background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
         }
-        /* 兼容移动端选择框 */
+        .protocol-tag.BOTH {
+            background: linear-gradient(90deg, #6c63ff 0%, #43a047 100%);
+        }
         @media (max-width: 480px) {
             select#protocol {
                 padding: 14px 16px 14px 42px;
                 font-size: 0.95rem;
             }
         }
-
-        /* 空状态 */
         .empty-state {
             text-align: center;
             padding: 40px 20px;
             color: var(--dark-light);
         }
-
         .empty-state i {
             font-size: 3rem;
             color: #cbd5e0;
             margin-bottom: 15px;
         }
-
-        /* 移动端适配 */
         @media (max-width: 768px) {
             body {
                 padding: 20px 15px;
             }
-
             header {
                 flex-direction: column;
                 text-align: center;
                 gap: 10px;
                 margin-bottom: 20px;
             }
-
             h1 {
                 font-size: 2rem;
             }
-
             .card {
                 padding: 20px;
             }
-
             h2 {
                 font-size: 1.3rem;
                 margin-bottom: 18px;
             }
-
             .form-grid {
                 grid-template-columns: 1fr;
                 gap: 18px;
             }
-
             .form-actions {
                 justify-content: center;
             }
-
             button {
                 width: 100%;
                 justify-content: center;
             }
-
             .rule-table th,
             .rule-table td {
                 padding: 14px 12px;
             }
         }
-
         @media (max-width: 480px) {
             h1 {
                 font-size: 1.8rem;
             }
-
             .card {
                 padding: 18px 15px;
             }
-
             input {
                 padding: 14px 16px 14px 42px;
                 font-size: 0.95rem;
             }
-
             .input-icon {
                 left: 15px;
                 font-size: 1rem;
             }
         }
-
-        /* 动画效果 */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: none; }
         }
-
         .fade-in {
             animation: fadeIn 0.5s forwards;
         }
@@ -518,7 +446,6 @@
                 </div>
             </div>
         </header>
-
         <div class="card fade-in">
             <h2>
                 <i class="fas fa-plus-circle"></i>
@@ -536,7 +463,6 @@
                             <input type="number" id="local_port" min="1" max="65535" placeholder="留空自动分配">
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="remote_ip">
                             <i class="fas fa-globe"></i>
@@ -547,7 +473,6 @@
                             <input type="text" id="remote_ip" required placeholder="如 1.2.3.4">
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="remote_port">
                             <i class="fas fa-ethernet"></i>
@@ -558,7 +483,6 @@
                             <input type="number" id="remote_port" required placeholder="如 8080">
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="protocol">
                             <i class="fas fa-random"></i>
@@ -568,10 +492,10 @@
                             <select id="protocol">
                                 <option value="tcp" selected>TCP</option>
                                 <option value="udp">UDP</option>
+                                <option value="both">TCP+UDP</option>
                             </select>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="remark">
                             <i class="fas fa-comment"></i>
@@ -582,7 +506,6 @@
                             <input type="text" id="remark" maxlength="100" placeholder="可选，规则说明">
                         </div>
                     </div>
-
                     <div class="form-actions">
                         <button type="submit">
                             <i class="fas fa-plus"></i>
@@ -593,7 +516,6 @@
             </form>
             <div id="message" class="message"></div>
         </div>
-
         <div class="card fade-in">
             <h2>
                 <i class="fas fa-list"></i>
@@ -611,12 +533,9 @@
                             <th>操作</th>
                         </tr>
                     </thead>
-                    <tbody id="rules-table-body">
-                        <!-- 动态内容将在这里填充 -->
-                    </tbody>
+                    <tbody id="rules-table-body"></tbody>
                 </table>
             </div>
-
             <div id="empty-state" class="empty-state" style="display: none;">
                 <i class="fas fa-inbox"></i>
                 <h3>暂无转发规则</h3>
@@ -624,42 +543,37 @@
             </div>
         </div>
     </div>
-
     <footer style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: var(--dark-light);">
         © 2025 鱼丸工作室
     </footer>
-
     <script>
         function getServerIp() {
             return location.hostname;
         }
-
         async function loadRules() {
             const response = await fetch('/api/rules');
             const rules = await response.json();
-
             const tableBody = document.getElementById('rules-table-body');
             const emptyState = document.getElementById('empty-state');
-
             if (Object.keys(rules).length === 0) {
                 tableBody.innerHTML = '';
                 emptyState.style.display = 'block';
                 return;
             }
-
             emptyState.style.display = 'none';
             tableBody.innerHTML = '';
-
             Object.entries(rules).forEach(([localPort, rule]) => {
+                let protocol = rule.protocol ? rule.protocol.toUpperCase() : 'TCP';
+                let protocolText = protocol === 'BOTH' ? 'TCP+UDP' : protocol;
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${rule.remark || ''}</td>
                     <td>${localPort}</td>
-                    <td>${rule.protocol ? rule.protocol.toUpperCase() : 'TCP'}</td>
+                    <td><span class="protocol-tag ${protocol}">${protocolText}</span></td>
                     <td>${rule.remote_ip}:${rule.remote_port}</td>
                     <td>
                         <span class="access-link">
-                            ${rule.protocol === 'udp' ? 'udp://' : 'http://'}${getServerIp()}:${localPort}
+                            http://${getServerIp()}:${localPort}
                             <button class="copy-btn" title="复制链接">
                                 <i class="far fa-copy"></i>
                             </button>
@@ -674,7 +588,6 @@
                 `;
                 tableBody.appendChild(row);
             });
-
             document.querySelectorAll('.copy-btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.stopPropagation();
@@ -691,7 +604,6 @@
                     }
                 });
             });
-
             document.querySelectorAll('.remove-btn').forEach(btn => {
                 btn.addEventListener('click', async function(e) {
                     const port = this.getAttribute('data-port');
@@ -712,12 +624,10 @@
                 });
             });
         }
-
         function showMessage(message, type = 'error') {
             const messageDiv = document.getElementById('message');
             messageDiv.textContent = message;
             messageDiv.className = `message ${type} show`;
-
             setTimeout(() => {
                 messageDiv.classList.remove('show');
                 setTimeout(() => {
@@ -726,22 +636,18 @@
                 }, 300);
             }, 6000);
         }
-
         document.getElementById('add-rule-form').addEventListener('submit', async function(e) {
             e.preventDefault();
-
             const localPort = document.getElementById('local_port').value;
             const remoteIp = document.getElementById('remote_ip').value;
             const remotePort = document.getElementById('remote_port').value;
             const remark = document.getElementById('remark').value;
             const protocol = document.getElementById('protocol').value;
-
             const response = await fetch('/api/add_rule', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: `local_port=${localPort}&remote_ip=${remoteIp}&remote_port=${remotePort}&remark=${remark}&protocol=${protocol}`
             });
-
             const result = await response.json();
             if (result.success) {
                 showMessage(result.message, 'success');
@@ -751,7 +657,6 @@
                 showMessage(result.message, 'error');
             }
         });
-
         window.addEventListener('DOMContentLoaded', () => {
             loadRules();
             document.querySelectorAll('.fade-in').forEach((el, i) => {
