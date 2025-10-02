@@ -8,6 +8,7 @@ NC='\033[0m' # No Color
 INSTALL_DIR="/opt/netrouteproxy"
 SERVICE_NAME="nr"
 
+
 echo -e "${GREEN}===== 开始安装 NetRouteProxy ====${NC}"
 
 # 检查root
